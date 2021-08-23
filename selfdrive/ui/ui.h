@@ -120,6 +120,12 @@ typedef struct UIScene {
   float light_sensor, accel_sensor, gyro_sensor;
   bool started, ignition, is_metric, longitudinal_control, end_to_end;
   uint64_t started_frame;
+
+  // jvePilot
+  int autoFollowButtonEnabled;
+  int accEcoButtonEnabled;
+  int autoFollowEnabled;
+  int accEco;
 } UIScene;
 
 typedef struct UIState {
@@ -138,6 +144,7 @@ typedef struct UIState {
   std::map<std::string, int> images;
 
   std::unique_ptr<SubMaster> sm;
+  std::unique_ptr<PubMaster> pm;
 
   UIStatus status;
   UIScene scene;

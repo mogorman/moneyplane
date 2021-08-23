@@ -15,9 +15,7 @@ class QDialogBase : public QDialog {
 
 protected:
   QDialogBase(QWidget *parent);
-  bool eventFilter(QObject *o, QEvent *e) override;
-
-public slots:
+  bool eventFilter(QObject *o, QEvent *e) override;public slots:
   int exec() override;
 };
 
@@ -28,9 +26,11 @@ public:
   explicit InputDialog(const QString &title, QWidget *parent, const QString &subtitle = "", bool secret = false);
   static QString getText(const QString &title, QWidget *parent, const QString &substitle = "",
                          bool secret = false, int minLength = -1, const QString &defaultText = "");
+  static QString getConfigDecimal(const QString &prompt, QWidget *parent, std::string existingValue, float min, float max);
   QString text();
   void setMessage(const QString &message, bool clearInputField = true);
   void setMinLength(int length);
+  void setText(const QString &test);
   void show();
 
 private:
