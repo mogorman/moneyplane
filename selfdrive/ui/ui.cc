@@ -197,6 +197,12 @@ static void update_state(UIState *s) {
     scene.light_sensor = std::clamp<float>(1.0 - (ev / max_ev), 0.0, 1.0);
   }
   scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
+
+  if (sm.updated("jvePilotState")) {
+    scene.autoFollowEnabled = sm["jvePilotState"].getJvePilotUIState().getAutoFollow() ? 1 : 0;
+    scene.accEco = sm["jvePilotState"].getJvePilotUIState().getAccEco();
+    scene.end_to_end = !sm["jvePilotState"].getJvePilotUIState().getUseLaneLines();
+  }
 }
 
 static void update_params(UIState *s) {
@@ -246,7 +252,6 @@ static void update_status(UIState *s) {
       s->status = STATUS_DISENGAGED;
       s->scene.started_frame = s->sm->frame;
 
-      s->scene.end_to_end = Params().getBool("EndToEndToggle");
       s->wide_camera = Hardware::TICI() ? Params().getBool("EnableWideCamera") : false;
 
       // Update intrinsics matrix after possible wide camera toggle change
@@ -269,10 +274,14 @@ static void update_status(UIState *s) {
 
 
 QUIState::QUIState(QObject *parent) : QObject(parent) {
-  ui_state.sm = std::make_unique<SubMaster, const std::initializer_list<const char *>>({
+  ui_state.pm = std::make_unique<PubMaster, const std::initializer_list<const char *>>({"jvePilotUIState"});
+  ui_state.sm = std::make_unique<SubMaster, const std::initializer_list<const char *>>({"jvePilotState",
     "modelV2", "controlsState", "liveCalibration", "deviceState", "roadCameraState",
     "pandaState", "carParams", "driverMonitoringState", "sensorEvents", "carState", "liveLocationKalman",
   });
+
+  ui_state.scene.autoFollowEnabled = -1;
+  ui_state.scene.accEco = -1;
 
   ui_state.fb_w = vwp_w;
   ui_state.fb_h = vwp_h;

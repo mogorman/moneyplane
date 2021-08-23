@@ -1,4 +1,5 @@
 #include "selfdrive/ui/qt/home.h"
+#include "selfdrive/ui/paint.h"
 
 #include <QDateTime>
 #include <QHBoxLayout>
@@ -46,6 +47,14 @@ void HomeWindow::showSidebar(bool show) {
   sidebar->setVisible(show);
 }
 
+void HomeWindow::notify_state() {
+  MessageBuilder msg;
+  auto state = msg.initEvent().initJvePilotUIState();
+  state.setAutoFollow(QUIState::ui_state.scene.autoFollowEnabled);
+  state.setAccEco(QUIState::ui_state.scene.accEco);
+  QUIState::ui_state.pm->send("jvePilotUIState", msg);
+}
+
 void HomeWindow::offroadTransition(bool offroad) {
   sidebar->setVisible(offroad);
   if (offroad) {
@@ -68,8 +77,27 @@ void HomeWindow::showDriverView(bool show) {
 
 void HomeWindow::mousePressEvent(QMouseEvent* e) {
   // Handle sidebar collapsing
+  // Handle button touch events
   if (onroad->isVisible()) {
-    sidebar->setVisible(!sidebar->isVisible() && !onroad->isMapVisible());
+    if (onroad->map != nullptr && onroad->map->isVisible()) {
+       onroad->map->setVisible(false);
+    } else if (authFollow_btn.ptInRect(e->x(), e->y())) {
+      QUIState::ui_state.scene.autoFollowEnabled = !QUIState::ui_state.scene.autoFollowEnabled;
+      notify_state();
+    } else if (accEco_img.ptInRect(e->x(), e->y())) {
+      QUIState::ui_state.scene.accEco = QUIState::ui_state.scene.accEco == 2 ? 0 : QUIState::ui_state.scene.accEco + 1;
+      notify_state();
+    } else if(!sidebar->isVisible() || e->x() > sidebar->width()) {
+      // TODO: Handle this without exposing pointer to map widget
+      // Hide map first if visible, then hide sidebar
+      if (!sidebar->isVisible()) {
+        sidebar->setVisible(true);
+      } else {
+        sidebar->setVisible(false);
+
+        if (onroad->map != nullptr) onroad->map->setVisible(true);
+      }
+    }
   }
 }
 

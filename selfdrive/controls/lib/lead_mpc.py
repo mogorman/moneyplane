@@ -58,7 +58,8 @@ class LeadMpc():
     self.cur_state[0].x_ego = 0.0
 
     if lead is not None and lead.status:
-      x_lead = lead.dRel
+      lead_ratio = CS.jvePilotCarState.leadDistanceRadarRatio if CS.jvePilotCarState.leadDistanceRadarRatio != 0 else 1
+      x_lead = lead.dRel * lead_ratio
       v_lead = max(0.0, lead.vLead)
       a_lead = lead.aLeadK
 
@@ -79,8 +80,8 @@ class LeadMpc():
     else:
       self.prev_lead_status = False
       # Fake a fast lead car, so mpc keeps running
-      self.cur_state[0].x_l = 50.0
-      self.cur_state[0].v_l = v_ego + 10.0
+      self.cur_state[0].x_l = 100.0  # farther
+      self.cur_state[0].v_l = v_ego + 20.0  # faster
       a_lead = 0.0
       self.a_lead_tau = _LEAD_ACCEL_TAU
 

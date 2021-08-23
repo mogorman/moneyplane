@@ -226,6 +226,49 @@ static void ui_draw_vision_face(UIState *s) {
   ui_draw_circle_image(s, center_x, center_y, radius, "driver_face", s->scene.dm_active);
 }
 
+static void ui_draw_button(UIState *s, Rect btn, const char *text, bool enabled) {
+  int btn_x = btn.x;
+  int btn_y = btn.y;
+  int btn_w = btn.right() - btn.x;
+  int btn_h = btn.bottom() - btn.y;
+  int center_x = btn_x + (btn_w / 2);
+  int center_y = btn_y + (btn_h / 2);
+
+  nvgBeginPath(s->vg);
+  nvgRoundedRect(s->vg, btn_x, btn_y, btn_w, btn_h, 25);
+  if (enabled) {  // change outline color based on status of button
+    nvgStrokeColor(s->vg, nvgRGBA(55, 184, 104, 255));
+  } else {
+    nvgStrokeColor(s->vg, nvgRGBA(200, 200, 200, 200));
+  }
+  nvgStrokeWidth(s->vg, 12);
+  nvgStroke(s->vg);
+
+  nvgBeginPath(s->vg);  // dark background for readability
+  nvgRoundedRect(s->vg, btn_x, btn_y, btn_w, btn_h, 25);
+  if (enabled) {  // change background color based on status of button
+    nvgFillColor(s->vg, nvgRGBA(55, 184, 104, 75));
+  } else {
+    nvgFillColor(s->vg, nvgRGBA(0, 0, 0, 75));
+  }
+  nvgFill(s->vg);
+
+  nvgFillColor(s->vg, nvgRGBA(255, 255, 255, 255));
+  nvgFontSize(s->vg, 60);
+  nvgText(s->vg, center_x, center_y + btn_h / 8, text, NULL);
+}
+
+static void ui_draw_jve_pilot_buttons(UIState *s) {
+  if (s->scene.autoFollowEnabled != -1) {
+    bool autoFollowEnabled = s->scene.autoFollowEnabled == 1;
+    ui_draw_button(s, authFollow_btn, autoFollowEnabled ? "Auto Follow" : "Auto Follow OFF", autoFollowEnabled);
+  }
+  if (s->scene.accEco != -1) {
+    const char *img = s->scene.accEco == 1 ? "acc_eco_1" : s->scene.accEco == 2 ? "acc_eco_2" : "acc_eco_off";
+    ui_draw_image(s, accEco_img, img, s->scene.accEco != 0 ? 1.0f : 0.7f);
+  }
+}
+
 static void ui_draw_vision_header(UIState *s) {
   NVGpaint gradient = nvgLinearGradient(s->vg, 0, header_h - (header_h / 2.5), 0, header_h,
                                         nvgRGBAf(0, 0, 0, 0.45), nvgRGBAf(0, 0, 0, 0));
@@ -233,6 +276,8 @@ static void ui_draw_vision_header(UIState *s) {
   ui_draw_vision_maxspeed(s);
   ui_draw_vision_speed(s);
   ui_draw_vision_event(s);
+
+  ui_draw_jve_pilot_buttons(s);
 }
 
 static void ui_draw_vision(UIState *s) {
@@ -356,6 +401,9 @@ void ui_nvg_init(UIState *s) {
 
   // init images
   std::vector<std::pair<const char *, const char *>> images = {
+    {"acc_eco_1", "../assets/jvepilot/img_acc_eco_1.png"},
+    {"acc_eco_2", "../assets/jvepilot/img_acc_eco_2.png"},
+    {"acc_eco_off", "../assets/jvepilot/img_acc_eco_off.png"},
     {"wheel", "../assets/img_chffr_wheel.png"},
     {"driver_face", "../assets/img_driver_face.png"},
   };
