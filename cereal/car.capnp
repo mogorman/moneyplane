@@ -9,6 +9,26 @@ $Java.outerClassname("Car");
 
 # ******* events causing controls state machine transition *******
 
+struct JvePilotState {
+  notifyUi @0 :Bool;
+  carState @1 :JvePilotState.CarState;
+  carControl @2 :JvePilotState.CarControl;
+
+  struct CarState {
+    leadDistanceRadarRatio @0 :Float32;
+    accFollowDistance @1 :UInt8;
+    buttonCounter @2 :UInt8;
+  }
+
+  struct CarControl {
+    vTargetFuture @0 :Float32;
+    autoFollow @1 :Bool;
+    accEco @2 :UInt8;
+    useLaneLines @3 :Bool;
+    vMaxCruise @4 :Float32;
+  }
+}
+
 struct CarEvent @0x9b1657f34caf3ad3 {
   name @0 :EventName;
 
@@ -129,7 +149,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     focusRecoverActiveDEPRECATED @86;
     neosUpdateRequiredDEPRECATED @88;
     modelLagWarningDEPRECATED @93;
-    startupOneplusDEPRECATED @82;
+    accBrakeHold @82; # repurposed for jvePilot
   }
 }
 
@@ -230,6 +250,7 @@ struct CarState {
   struct ButtonEvent {
     pressed @0 :Bool;
     type @1 :Type;
+    pressedFrames @2: UInt32;
 
     enum Type {
       unknown @0;
@@ -244,11 +265,14 @@ struct CarState {
       setCruise @9;
       resumeCruise @10;
       gapAdjustCruise @11;
+      followInc @12;
+      followDec @13;
+      lkasToggle @14;
     }
   }
 
   errorsDEPRECATED @0 :List(CarEvent.EventName);
-  brakeLightsDEPRECATED @19 :Bool;
+  jvePilotCarState @19 :JvePilotState.CarState;  # repurposed for jvePilot
 }
 
 # ******* radar state @ 20hz *******
@@ -354,7 +378,7 @@ struct CarControl {
 
   gasDEPRECATED @1 :Float32;
   brakeDEPRECATED @2 :Float32;
-  steeringTorqueDEPRECATED @3 :Float32;
+  jvePilotState @3 :JvePilotState; # repurposed for jvePilot
 }
 
 # ****** car param ******
@@ -567,5 +591,5 @@ struct CarParams {
   }
 
   enableCameraDEPRECATED @4 :Bool;
-  isPandaBlackDEPRECATED @39: Bool;
+  pcmCruiseSpeed @39: Bool; # repurposed for jvePilot
 }

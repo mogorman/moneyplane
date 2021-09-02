@@ -1355,6 +1355,12 @@ struct ManagerState {
   }
 }
 
+struct JvePilotUIState {
+  autoFollow @0 :Bool;
+  accEco @1 :UInt8;
+  useLaneLines @2 :Bool;
+}
+
 struct UploaderState {
   immediateQueueSize @0 :UInt32;
   immediateQueueCount @1 :UInt32;
@@ -1463,6 +1469,6 @@ struct Event {
     featuresDEPRECATED @10 :Legacy.CalibrationFeatures;
     kalmanOdometryDEPRECATED @65 :Legacy.KalmanOdometry;
     gpsLocationDEPRECATED @21 :GpsLocationData;
-    uiLayoutStateDEPRECATED @57 :Legacy.UiLayoutState;
+    jvePilotUIState @57 :JvePilotUIState; # repurposed for jvePilot;
   }
 }
