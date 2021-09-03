@@ -163,6 +163,16 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"jvePilot.settings.slowInCurves.speedDropOffAngle", PERSISTENT},
     {"jvePilot.settings.speedAdjustRatio", PERSISTENT},
 
+    {"moneyPlane.settings.pandaModEnabled", PERSISTENT},
+    {"moneyPlane.settings.tetherEnabled", PERSISTENT},
+    {"moneyPlane.settings.onRoadUploadEnabled", PERSISTENT},
+    {"moneyPlane.settings.mqtt.broker", PERSISTENT},
+    {"moneyPlane.settings.mqtt.port", PERSISTENT},
+    {"moneyPlane.settings.mqtt.user", PERSISTENT},
+    {"moneyPlane.settings.mqtt.pass", PERSISTENT},
+    {"moneyPlane.settings.mqtt.haConfig", PERSISTENT},
+    {"moneyPlane.settings.mqtt.haStatus", PERSISTENT},
+
     {"AccessToken", CLEAR_ON_MANAGER_START | DONT_LOG},
     {"ApiCache_DriveStats", PERSISTENT},
     {"ApiCache_Device", PERSISTENT},

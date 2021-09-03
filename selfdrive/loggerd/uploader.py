@@ -250,12 +250,23 @@ def uploader_fn(exit_event):
   pm = messaging.PubMaster(['uploaderState'])
   uploader = Uploader(dongle_id, ROOT)
 
+  last_offroad = params.get_bool("IsOffroad")
   backoff = 0.1
   while not exit_event.is_set():
     sm.update(0)
     offroad = params.get_bool("IsOffroad")
+    if last_offroad != offroad:
+      last_offroad = offroad
+      if params.get_bool("moneyPlane.settings.tetherEnabled"):
+        tether_value = "0" if offroad else "1"
+        print(f"TETHER {tether_value}")
+        cmd = f"service call wifi 37 i32 0 i32 {tether_value}"
+        os.system(cmd)
+
     network_type = sm['deviceState'].networkType if not force_wifi else NetworkType.wifi
-    if network_type == NetworkType.none:
+    allow_upload_on_road = params.get_bool("moneyPlane.settings.onRoadUploadEnabled") or offroad
+
+    if network_type == NetworkType.none or not allow_upload_on_road:
       if allow_sleep:
         time.sleep(60 if offroad else 5)
       continue

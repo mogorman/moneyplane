@@ -36,6 +36,10 @@ procs = [
   PythonProcess("updated", "selfdrive.updated", enabled=not PC, persistent=True),
   PythonProcess("uploader", "selfdrive.loggerd.uploader", persistent=True),
 
+  # disabled for now
+#  PythonProcess("mqttd", "selfdrive.mqttd.mqttd", persistent=True),
+#  PythonProcess("mqttd_status", "selfdrive.mqttd.status", persistent=True),
+
   # EON only
   PythonProcess("rtshield", "selfdrive.rtshield", enabled=EON),
   PythonProcess("androidd", "selfdrive.hardware.eon.androidd", enabled=EON, persistent=True),

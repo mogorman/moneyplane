@@ -1,3 +1,18 @@
+# mogPilot: A fork of jvePilot with a few of my own opinionated changes
+This for is only for Mog's Chrysler Pacifica 2021. If it works for you that's great. I still reccomend people run [jvepilot](https://github.com/j-vanetten/openpilot) on which this fork is based.
+
+# Current differences from jvePilot
+* Autotether support, enable tether when on road, and disable it when off road
+* `steer.checkMinimum` is set to False by defualt (you need to change this to True if you don't have the white panda mod installed)
+* Set minimum steer speed to -0.1 so that you don't get warnings at 0mph
+* Offset max speed in ui 450 pixels down so its not blocked by my fish eye lens, also dont show max speed until its set.
+* Include lkas mitigation from xps https://github.com/commaai/openpilot/pull/21064
+* added paho-mqtt as pyextra for future use. op_edit the following variables to make use of.
+ + `mqttBroker` mqtt host to connect to
+ + `mqttPort` port to connect on defaults to 1883
+ + `mqttUser` username to use
+ + `mqttPass` password to use
+
 # jvePilot Hybrid OpenPilot/ACC for Chrysler/Jeep 
 This fork is only for Chrysler/Jeep vehicles!
 

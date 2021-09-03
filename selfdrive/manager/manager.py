@@ -55,6 +55,17 @@ def manager_init():
     ("jvePilot.settings.slowInCurves.speedDropOffAngle", "0.0"),
     ("jvePilot.settings.speedAdjustRatio", "1.00"),
 
+    ("moneyPlane.settings.pandaModEnabled", "1"),
+    ("moneyPlane.settings.tetherEnabled", "1"),
+    ("moneyPlane.settings.onRoadUploadEnabled", "0"),
+
+    ("moneyPlane.settings.mqtt.broker", ""),
+    ("moneyPlane.settings.mqtt.port", "1883"),
+    ("moneyPlane.settings.mqtt.user", ""),
+    ("moneyPlane.settings.mqtt.pass", ""),
+    ("moneyPlane.settings.mqtt.haConfig", "homeassistant"),
+    ("moneyPlane.settings.mqtt.haStatus", "home"),
+
     ("CompletedTrainingVersion", "0"),
     ("HasAcceptedTerms", "0"),
     ("OpenpilotEnabledToggle", "1"),

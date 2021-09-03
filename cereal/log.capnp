@@ -1373,6 +1373,19 @@ struct UploaderState {
   lastFilename @6 :Text;
 }
 
+struct MqttPubQueue {
+  publish @0 :Bool;
+  subscribe @1 :Bool;
+  topic @2 :Text;
+  content @3 :Text;
+}
+
+struct MqttRecvQueue {
+  topic @0 :Text;
+  payload @1 :Text;
+}
+
+
 struct Event {
   logMonoTime @0 :UInt64;  # nanoseconds
   valid @67 :Bool = true;
@@ -1470,5 +1483,7 @@ struct Event {
     kalmanOdometryDEPRECATED @65 :Legacy.KalmanOdometry;
     gpsLocationDEPRECATED @21 :GpsLocationData;
     jvePilotUIState @57 :JvePilotUIState; # repurposed for jvePilot;
+    mqttPubQueue @80 :MqttPubQueue;
+    mqttRecvQueue @81 :MqttRecvQueue;
   }
 }
