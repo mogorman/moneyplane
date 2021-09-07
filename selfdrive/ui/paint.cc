@@ -192,7 +192,6 @@ static void ui_draw_vision_maxspeed(UIState *s) {
   if(!is_cruise_set)
     return;
 
-  const Rect rect = {bdr_s * 2, int(bdr_s * 1.5), 184, 202};
   ui_fill_rect(s->vg, rect, COLOR_BLACK_ALPHA(100), 30.);
   ui_draw_rect(s->vg, rect, COLOR_WHITE_ALPHA(100), 10, 20.);
 
