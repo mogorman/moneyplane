@@ -7,7 +7,7 @@ from common.basedir import BASEDIR
 from selfdrive.swaglog import cloudlog
 
 
-TESTED_BRANCHES = ['jvePilot-release', 'origin/jvePilot-release']
+TESTED_BRANCHES = ['jvePilot-release', 'origin/jvePilot-release', 'mog', 'origin/mog', 'mog_beta', 'origin/mog_beta']
 
 
 def run_cmd(cmd: List[str]) -> str:
