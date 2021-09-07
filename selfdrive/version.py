@@ -62,7 +62,7 @@ commit = get_git_commit()
 
 if (origin is not None) and (branch is not None):
   try:
-    comma_remote = origin.startswith('git@github.com:j-vanetten') or origin.startswith('https://github.com/j-vanetten')
+    comma_remote = origin.startswith('git@github.com:mogorman') or origin.startswith('https://github.com/mogorman')
     tested_branch = get_git_branch() in TESTED_BRANCHES
 
     dirty = False
@@ -80,7 +80,7 @@ if (origin is not None) and (branch is not None):
       if dirty and comma_remote:
         try:
           dirty_files = run_cmd(["git", "diff-index", branch, "--"])
-          cloudlog.event("dirty jvePilot branch", version=version, dirty=dirty, origin=origin, branch=branch,
+          cloudlog.event("dirty mog branch", version=version, dirty=dirty, origin=origin, branch=branch,
                          dirty_files=dirty_files, commit=commit, origin_commit=get_git_commit(branch))
         except subprocess.CalledProcessError:
           pass
