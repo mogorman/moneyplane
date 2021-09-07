@@ -28,6 +28,12 @@ public:
   explicit JvePilotTogglesPanel(QWidget *parent = nullptr);
 };
 
+class MoneyPlaneTogglesPanel : public QWidget {
+  Q_OBJECT
+public:
+  explicit MoneyPlaneTogglesPanel(QWidget *parent = nullptr);
+};
+
 class TogglesPanel : public QWidget {
   Q_OBJECT
 public:
