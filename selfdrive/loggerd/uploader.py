@@ -257,7 +257,7 @@ def uploader_fn(exit_event):
     network_type = sm['deviceState'].networkType if not force_wifi else NetworkType.wifi
     allow_upload_on_road = params.get_bool("moneyPlane.settings.onRoadUploadEnabled") or offroad
 
-    if network_type == NetworkType.none or not allowed_upload_on_road:
+    if network_type == NetworkType.none or not allow_upload_on_road:
       if allow_sleep:
         time.sleep(60 if offroad else 5)
       continue
