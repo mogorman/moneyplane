@@ -128,7 +128,9 @@ class CarController():
         can_sends.append(new_msg)
         self.hud_count += 1
 
-    new_msg = create_lkas_command(self.packer, int(apply_steer), self.gone_fast_yet, frame)
+    wp_mod_enabled = (self.cachedParams.get('moneyPlane.settings.pandaModEnabled', 5000) == "1")
+    moving_fast_check = (self.gone_fast_yet and enabled) if wp_mod_enabled else self.gone_fast_yet
+    new_msg = create_lkas_command(self.packer, int(apply_steer), moving_fast_check, frame)
     can_sends.append(new_msg)
 
     return can_sends
