@@ -31,7 +31,7 @@ class CarState(CarStateBase):
     self.lkasHeartbit = None
 
   def update(self, cp, cp_cam):
-    min_steer_check = self.opParams.get('steer.checkMinimum')
+    min_steer_check = (self.cachedParams.get('moneyPlane.settings.pandaModEnabled', 5000) == "0")
 
     ret = car.CarState.new_message()
 

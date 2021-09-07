@@ -19,7 +19,7 @@ class CarInterface(CarInterfaceBase):
 
   @staticmethod
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=None):
-    min_steer_check = opParams.get('steer.checkMinimum')
+    min_steer_check = (cachedParams.get('moneyPlane.settings.pandaModEnabled', 5000) == "0")
 
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
     ret.carName = "chrysler"
@@ -47,6 +47,7 @@ class CarInterface(CarInterfaceBase):
 
     ret.centerToFront = ret.wheelbase * 0.44
 
+    ret.minSteerSpeed = -0.1
     if min_steer_check:
       ret.minSteerSpeed = 3.8  # m/s
       if candidate in (CAR.PACIFICA_2019_HYBRID, CAR.PACIFICA_2020, CAR.JEEP_CHEROKEE_2019):
