@@ -77,7 +77,6 @@ void HomeWindow::showDriverView(bool show) {
 
 void HomeWindow::mousePressEvent(QMouseEvent* e) {
   // Handle sidebar collapsing
-  // Handle button touch events
   if (onroad->isVisible()) {
     if (QUIState::ui_state.scene.autoFollow_btn.ptInRect(e->x(), e->y())) {
       QUIState::ui_state.scene.autoFollowEnabled = !QUIState::ui_state.scene.autoFollowEnabled;
