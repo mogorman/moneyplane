@@ -191,6 +191,7 @@ function launch {
     two_init
   elif [ -f /TICI ]; then
     tici_init
+    sudo /data/openpilot/mount_gadget.sh
   fi
 
   # write tmux scrollback to a file
