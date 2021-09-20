@@ -69,26 +69,8 @@ void HomeWindow::showDriverView(bool show) {
 
 void HomeWindow::mousePressEvent(QMouseEvent* e) {
   // Handle sidebar collapsing
-  if (onroad->isVisible()) {
-    if (QUIState::ui_state.scene.autoFollow_btn.ptInRect(e->x(), e->y())) {
-      QUIState::ui_state.scene.autoFollowEnabled = !QUIState::ui_state.scene.autoFollowEnabled;
-      notify_state();
-    } else if (QUIState::ui_state.scene.accEco_img.ptInRect(e->x(), e->y())) {
-      QUIState::ui_state.scene.accEco = QUIState::ui_state.scene.accEco == 2 ? 0 : QUIState::ui_state.scene.accEco + 1;
-      notify_state();
-    } else if (onroad->map != nullptr && onroad->map->isVisible()) {
-       onroad->map->setVisible(false);
-    } else if(!sidebar->isVisible() || e->x() > sidebar->width()) {
-      // TODO: Handle this without exposing pointer to map widget
-      // Hide map first if visible, then hide sidebar
-      if (!sidebar->isVisible()) {
-        sidebar->setVisible(true);
-      } else {
-        sidebar->setVisible(false);
-
-        if (onroad->map != nullptr) onroad->map->setVisible(true);
-      }
-    }
+  if (onroad->isVisible() && (!sidebar->isVisible() || e->x() > sidebar->width())) {
+    sidebar->setVisible(!sidebar->isVisible() && !onroad->isMapVisible());
   }
 }
 
@@ -200,3 +182,4 @@ void OffroadHome::refresh() {
     alert_notif->setText(QString::number(alerts) + " ALERT" + (alerts > 1 ? "S" : ""));
   }
 }
+
