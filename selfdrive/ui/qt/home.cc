@@ -47,14 +47,6 @@ void HomeWindow::showSidebar(bool show) {
   sidebar->setVisible(show);
 }
 
-void HomeWindow::notify_state() {
-  MessageBuilder msg;
-  auto state = msg.initEvent().initJvePilotUIState();
-  state.setAutoFollow(QUIState::ui_state.scene.autoFollowEnabled);
-  state.setAccEco(QUIState::ui_state.scene.accEco);
-  QUIState::ui_state.pm->send("jvePilotUIState", msg);
-}
-
 void HomeWindow::offroadTransition(bool offroad) {
   sidebar->setVisible(offroad);
   if (offroad) {
@@ -77,7 +69,6 @@ void HomeWindow::showDriverView(bool show) {
 
 void HomeWindow::mousePressEvent(QMouseEvent* e) {
   // Handle sidebar collapsing
-  // Handle button touch events
   if (onroad->isVisible()) {
     if (QUIState::ui_state.scene.autoFollow_btn.ptInRect(e->x(), e->y())) {
       QUIState::ui_state.scene.autoFollowEnabled = !QUIState::ui_state.scene.autoFollowEnabled;
