@@ -47,14 +47,6 @@ void HomeWindow::showSidebar(bool show) {
   sidebar->setVisible(show);
 }
 
-void HomeWindow::notify_state() {
-  MessageBuilder msg;
-  auto state = msg.initEvent().initJvePilotUIState();
-  state.setAutoFollow(QUIState::ui_state.scene.autoFollowEnabled);
-  state.setAccEco(QUIState::ui_state.scene.accEco);
-  QUIState::ui_state.pm->send("jvePilotUIState", msg);
-}
-
 void HomeWindow::offroadTransition(bool offroad) {
   sidebar->setVisible(offroad);
   if (offroad) {
