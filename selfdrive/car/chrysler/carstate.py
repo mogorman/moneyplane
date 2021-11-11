@@ -6,6 +6,7 @@ from selfdrive.car.interfaces import CarStateBase
 from selfdrive.car.chrysler.values import DBC, STEER_THRESHOLD
 from common.cached_params import CachedParams
 from common.op_params import opParams
+from selfdrive.car.chrysler.values import CAR
 import numpy as np
 
 ButtonType = car.CarState.ButtonEvent.Type
@@ -32,6 +33,12 @@ class CarState(CarStateBase):
     self.lkasHeartbit = None
     self.dashboard = None
     self.speedRequested = 0
+    self.acc_1 = None
+    self.acc_2 = None
+    self.aEgoRaw = None
+    self.gasRpm = None
+    self.hybridAxle = None
+    self.hybrid = CP.carFingerprint in (CAR.PACIFICA_2017_HYBRID, CAR.PACIFICA_2018_HYBRID, CAR.PACIFICA_2019_HYBRID)
 
   def update(self, cp, cp_cam):
     min_steer_check = (self.cachedParams.get('moneyPlane.settings.pandaModEnabled', 5000) == "0")
@@ -59,6 +66,7 @@ class CarState(CarStateBase):
     ret.wheelSpeeds.fr = cp.vl["WHEEL_SPEEDS"]["WHEEL_SPEED_FR"]
     ret.vEgoRaw = cp.vl["BRAKE_1"]["VEHICLE_SPEED_KPH"] * CV.KPH_TO_MS
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
+    self.aEgoRaw = ret.aEgo # cp.vl["SENSORS"]["ACCELERATION"]
     ret.standstill = ret.vEgoRaw <= 0.1
 
     ret.leftBlinker = cp.vl["STEERING_LEVERS"]["TURN_SIGNALS"] == 1
@@ -89,6 +97,10 @@ class CarState(CarStateBase):
     self.lkas_counter = cp_cam.vl["LKAS_COMMAND"]["COUNTER"]
     self.lkas_car_model = cp_cam.vl["LKAS_HUD"]["CAR_MODEL"]
     self.torq_status = cp.vl["EPS_STATUS"]["TORQ_STATUS"]
+    self.gasRpm = cp.vl["ACCEL_PEDAL_MSG"]["ENGINE_RPM"]
+    self.acc_1 = cp.vl['ACC_1']
+    self.acc_2 = cp.vl['ACC_2']
+    self.hybridAxle = cp.vl['AXLE_TORQ']
 
     brake = cp.vl["BRAKE_1"]["BRAKE_VAL_TOTAL"]
     gas = cp.vl["ACCEL_RELATED_120"]["ACCEL"]
@@ -155,7 +167,6 @@ class CarState(CarStateBase):
       ("STEER_ANGLE", "STEERING", 0),
       ("STEERING_RATE", "STEERING", 0),
       ("TURN_SIGNALS", "STEERING_LEVERS", 0),
-      ("ACC_ENABLED", "ACC_2", 0),
       ("HIGH_BEAM_FLASH", "STEERING_LEVERS", 0),
       ("ACC_SPEED_CONFIG_KPH", "DASHBOARD", 0),
       ("CRUISE_STATE", "DASHBOARD", 0),
@@ -181,6 +192,30 @@ class CarState(CarStateBase):
       ("VEHICLE_SPEED_KPH", "BRAKE_1", 0),
       ("BRAKE_VAL_TOTAL", "BRAKE_1", 0),
       ("ACCEL", "ACCEL_RELATED_120", 0),
+
+      ("ACC_STOP", "ACC_2", 0),
+      ("ACC_GO", "ACC_2", 0),
+      ("ACC_TORQ", "ACC_2", 0),
+      ("ACC_TORQ_REQ", "ACC_2", 0),
+      ("ACC_DECEL", "ACC_2", 0),
+      ("ACC_DECEL_REQ", "ACC_2", 0),
+      ("ACC_AVAILABLE", "ACC_2", 0),
+      ("ACC_ENABLED", "ACC_2", 0),
+      ("DISABLE_FUEL_SHUTOFF", "ACC_2", 0),
+      ("GR_MAX_REQ", "ACC_2", 0),
+      ("STS", "ACC_2", 0),
+      ("COLLISION_BRK_PREP", "ACC_2", 0),
+      ("ACC_BRK_PREP", "ACC_2", 0),
+      ("DISPLAY_REQ", "ACC_2", 0),
+      ("COUNTER", "ACC_2", 0),
+      ("CHECKSUM", "ACC_2", 0),
+
+      ("FORWARD_1", "ACC_1", 0),
+      ("FORWARD_2", "ACC_1", 0),
+      ("FORWARD_3", "ACC_1", 0),
+
+      ("ACCELERATION", "SENSORS", 0),
+      ("ENGINE_RPM", "ACCEL_PEDAL_MSG", 0),
     ]
 
     checks = [
@@ -201,8 +236,19 @@ class CarState(CarStateBase):
       ("WHEEL_BUTTONS", 50),
       ("BLIND_SPOT_WARNINGS", 2),
       ("BRAKE_1", 100),
-      ("ACCEL_RELATED_120", 50)
+      ("ACCEL_RELATED_120", 50),
+      ("SENSORS", 50),
+      ("ACCEL_PEDAL_MSG", 50),
+      ("ACC_1", 50),
     ]
+
+    if CP.carFingerprint in (CAR.PACIFICA_2017_HYBRID, CAR.PACIFICA_2018_HYBRID, CAR.PACIFICA_2019_HYBRID):
+      signals += [
+        ("AXLE_TORQ", "AXLE_TORQ", 0),
+        ("AXLE_TORQ_MIN", "AXLE_TORQ", 0),
+        ("AXLE_TORQ_MAX", "AXLE_TORQ", 0),
+      ]
+      checks += [("AXLE_TORQ", 30)]
 
     if CP.enableBsm:
       signals += [

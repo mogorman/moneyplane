@@ -104,8 +104,6 @@ MoneyPlaneTogglesPanel::MoneyPlaneTogglesPanel(QWidget *parent) : QWidget(parent
 }
 
 JvePilotTogglesPanel::JvePilotTogglesPanel(QWidget *parent) : ListWidget(parent) {
-  QList<AbstractControl*> toggles;
-
   // slowInCurves
   QList<struct ConfigButton> slowInCurvesConfigs = {
     { "jvePilot.settings.slowInCurves.speedRatio",
@@ -129,6 +127,36 @@ JvePilotTogglesPanel::JvePilotTogglesPanel(QWidget *parent) : ListWidget(parent)
                                   "../assets/jvepilot/settings/icon_slow_in_curves.png",
                                   this,
                                   &slowInCurvesConfigs));
+
+  QList<struct ConfigButton> accConfigs = {
+    { "jvePilot.settings.longControl.maxAccelTorq",
+      0, 1500,
+      "maxAccelTorq",
+      "Default: 360"
+    }
+    ,{ "jvePilot.settings.longControl.vehicleMass",
+      0, 10000,
+      "vehicleMass in kg",
+      "Default: 2268 kg"
+    }
+    ,{ "jvePilot.settings.longControl.hystGap",
+      0, 5,
+      "hystGap",
+      "Default: 0.03"
+    }
+    ,{ "jvePilot.settings.longControl.torqStart",
+      0, 100,
+      "torqStart",
+      "Default: 80"
+    }
+  };
+  addItem(new ParamControl("jvePilot.settings.longControl",
+                                  "OP Long Control",
+                                  "Ignored for now...",
+                                  "",
+                                  this,
+                                  &accConfigs));
+
   // autoFollow
   QList<struct ConfigButton> autoFollowConfigs = {
     { "jvePilot.settings.autoFollow.speed1-2Bars",

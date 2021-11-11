@@ -137,7 +137,7 @@ class CarInterfaceBase():
 
     if cs_out.cruiseState.nonAdaptive:
       events.add(EventName.wrongCruiseMode)
-    elif not cs_out.cruiseState.available:
+    if not cs_out.cruiseState.available:
       events.add(EventName.wrongCarMode)
 
     if not cs_out.cruiseState.enabled and len(events.names) and cs_out.vEgo <= gas_resume_speed:

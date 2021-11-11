@@ -50,6 +50,11 @@ def manager_init():
     ("jvePilot.settings.slowInCurves.speedRatio", "1.0"),
     ("jvePilot.settings.slowInCurves.speedDropOff", "2.0"),
     ("jvePilot.settings.slowInCurves.speedDropOffAngle", "0.0"),
+    ("jvePilot.settings.longControl", "1"),
+    ("jvePilot.settings.longControl.maxAccelTorq", "360"),
+    ("jvePilot.settings.longControl.vehicleMass", "2268"),
+    ("jvePilot.settings.longControl.hystGap", "0.3"),
+    ("jvePilot.settings.longControl.torqStart", "80"),
 
     ("moneyPlane.settings.pandaModEnabled", "1"),
     ("moneyPlane.settings.tetherEnabled", "1"),
