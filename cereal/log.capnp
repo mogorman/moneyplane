@@ -1488,8 +1488,8 @@ struct Event {
     kalmanOdometryDEPRECATED @65 :Legacy.KalmanOdometry;
     gpsLocationDEPRECATED @21 :GpsLocationData;
     jvePilotUIState @57 :JvePilotUIState; # repurposed for jvePilot;
-    mqttPubQueue @80 :MqttPubQueue;
-    mqttRecvQueue @81 :MqttRecvQueue;
+    mqttPubQueue @82 :MqttPubQueue;
+    mqttRecvQueue @83 :MqttRecvQueue;
     pandaStateDEPRECATED @12 :PandaState;
   }
 }

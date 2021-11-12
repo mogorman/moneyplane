@@ -3,12 +3,14 @@ from cereal import car
 from selfdrive.car.chrysler.values import CAR
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
 from selfdrive.car.interfaces import CarInterfaceBase
+from common.cached_params import CachedParams
 from common.op_params import opParams
 
 ButtonType = car.CarState.ButtonEvent.Type
 
 GAS_RESUME_SPEED = 2.
 opParams = opParams()
+cachedParams = CachedParams()
 
 class CarInterface(CarInterfaceBase):
   @staticmethod
