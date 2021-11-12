@@ -59,7 +59,7 @@ class CarController():
   def update(self, enabled, CS, actuators, pcm_cancel_cmd, hud_alert, gas_resume_speed, c):
     if CS.button_pressed(ButtonType.lkasToggle, False):
       c.jvePilotState.carControl.useLaneLines = not c.jvePilotState.carControl.useLaneLines
-      self.params.put("EndToEndToggle", self.moneyPlaneOpLong)
+      self.params.put("EndToEndToggle", "1" if self.moneyPlaneOpLong else "0")
       c.jvePilotState.notifyUi = True
 
     #*** control msgs ***
