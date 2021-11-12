@@ -52,12 +52,14 @@ class CarController():
     self.autoFollowDistanceLock = None
     self.moving_fast = False
     self.min_steer_check = self.opParams.get("steer.checkMinimum")
+    self.moneyPlaneOpLong = (self.cachedParams.get('moneyPlane.settings.opLong', 5000) == "1")
+ 
     self.gone_fast_yet = False
 
   def update(self, enabled, CS, actuators, pcm_cancel_cmd, hud_alert, gas_resume_speed, c):
     if CS.button_pressed(ButtonType.lkasToggle, False):
       c.jvePilotState.carControl.useLaneLines = not c.jvePilotState.carControl.useLaneLines
-      self.params.put("EndToEndToggle", "0" if c.jvePilotState.carControl.useLaneLines else "1")
+      self.params.put("EndToEndToggle", self.moneyPlaneOpLong)
       c.jvePilotState.notifyUi = True
 
     #*** control msgs ***
@@ -85,7 +87,7 @@ class CarController():
       return
     self.last_acc_2_counter = acc_2_counter
 
-    if not enabled or jvepilot_state.carControl.useLaneLines:
+    if not enabled or not self.moneyPlaneOpLong:
       self.last_brake = None
       self.last_torque = ACCEL_TORQ_START
       self.last_aTarget = CS.aEgoRaw
@@ -285,7 +287,7 @@ class CarController():
       return 'ACC_RESUME'
 
   def hybrid_acc_button(self, CS, jvepilot_state):
-    if jvepilot_state.carControl.useLaneLines:
+    if not self.moneyPlaneOpLong:
       target = jvepilot_state.carControl.vTargetFuture + 3 * CV.MPH_TO_MS  # add extra speed so ACC does the limiting
 
       # Move the adaptive curse control to the target speed

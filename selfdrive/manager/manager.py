@@ -59,6 +59,7 @@ def manager_init():
     ("moneyPlane.settings.pandaModEnabled", "1"),
     ("moneyPlane.settings.tetherEnabled", "1"),
     ("moneyPlane.settings.onRoadUploadEnabled", "0"),
+    ("moneyPlane.settings.opLong", "0"),
 
     ("moneyPlane.settings.mqtt.broker", ""),
     ("moneyPlane.settings.mqtt.port", "1883"),

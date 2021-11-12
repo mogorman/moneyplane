@@ -86,7 +86,12 @@ MoneyPlaneTogglesPanel::MoneyPlaneTogglesPanel(QWidget *parent) : QWidget(parent
                                   "If Enabled allow uploads to be made by uploader while driving.",
                                   "../assets/offroad/icon_road.png",
                                   this));
-  toggles.append(new LabelControl("MQTT Settings",
+  toggles.append(new ParamControl("moneyPlane.settings.opLong",
+                                  "Enable op long hacks DOES NOT WORK",
+                                  "DONT ENABLE",
+                                  "../assets/offroad/icon_road.png",
+                                  this));
+   toggles.append(new LabelControl("MQTT Settings",
                                   "",
                                   "Use these settings are used to configure mqtt to server.",
                                   this,

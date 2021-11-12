@@ -148,6 +148,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"moneyPlane.settings.pandaModEnabled", PERSISTENT},
     {"moneyPlane.settings.tetherEnabled", PERSISTENT},
     {"moneyPlane.settings.onRoadUploadEnabled", PERSISTENT},
+    {"moneyPlane.settings.opLong", PERSISTENT},
     {"moneyPlane.settings.mqtt.broker", PERSISTENT},
     {"moneyPlane.settings.mqtt.port", PERSISTENT},
     {"moneyPlane.settings.mqtt.user", PERSISTENT},
