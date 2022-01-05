@@ -70,10 +70,16 @@ AbstractControl::AbstractControl(const QString &title, const QString &desc, cons
       const auto b = new ButtonControl(control_title, "CHANGE", btn.text);
       QObject::connect(b, &ButtonControl::clicked, [=]() {
           auto set_value = Params().get(btn.param);
-          auto new_value = InputDialog::getConfigDecimal(btn.title, parent, set_value, btn.min, btn.max);
-          if (new_value.length() > 0) {
-            Params().put(btn.param, new_value.toStdString());
-            b->setLabel(QString::fromStdString(btn.title.toStdString() + ": " + new_value.toStdString()));
+          if (btn.min != 0 && btn.max != 0) {
+            auto new_value = InputDialog::getConfigDecimal(btn.title, parent, set_value, btn.min, btn.max);
+            if (new_value.length() > 0) {
+              Params().put(btn.param, new_value.toStdString());
+              b->setLabel(QString::fromStdString(btn.title.toStdString() + ": " + new_value.toStdString()));
+            }
+          } else {
+              auto new_value = InputDialog::getText(btn.title, parent);
+              Params().put(btn.param, new_value.toStdString());
+              b->setLabel(QString::fromStdString(btn.title.toStdString() + ": " + new_value.toStdString()));
           }
         });
       b->setContentsMargins(40, 20, 0, 0);

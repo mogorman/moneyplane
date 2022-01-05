@@ -26,6 +26,74 @@
 #include "selfdrive/ui/qt/util.h"
 #include "selfdrive/ui/qt/qt_window.h"
 
+MoneyPlaneTogglesPanel::MoneyPlaneTogglesPanel(QWidget *parent) : ListWidget(parent) {
+  QList<AbstractControl*> toggles;
+
+  QList<struct ConfigButton> mqttConfigs = {
+    { "moneyPlane.settings.mqtt.broker",
+      0, 0,
+      "Broker",
+      "Default: \"\"\n"
+        "MQTT server to connect to."
+    }
+    ,{ "moneyPlane.settings.mqtt.port",
+       0, 0,
+      "Port",
+      "Default: 1883\n"
+        "MQTT server port to connect to."
+    }
+    ,{ "moneyPlane.settings.mqtt.user",
+       0, 0,
+      "Username",
+      "Default: \"\"\n"
+        "MQTT User to provide server with."
+    }
+    ,{ "moneyPlane.settings.mqtt.pass",
+       0, 0,
+      "Password",
+      "Default: \"\"\n"
+        "MQTT Password to provide server with."
+    }
+    ,{ "moneyPlane.settings.mqtt.haConfig",
+       0, 0,
+      "HA Config Prefix",
+      "Default: homeassistant\n"
+        "MQTT Config messages prefix."
+    }
+    ,{ "moneyPlane.settings.mqtt.haStatus",
+       0, 0,
+      "HA Status Prefix",
+      "Default: home\n"
+        "MQTT Status message prefix."
+    }
+  };
+
+  addItem(new ParamControl("moneyPlane.settings.pandaModEnabled",
+                                  "Enables Panda mod for driving",
+                                  "Removes steering limit below 39mph in Chrysler cars",
+                                  "../assets/offroad/icon_speed_limit.png",
+                                  this));
+
+  addItem(new ParamControl("moneyPlane.settings.tetherEnabled",
+                                  "Enables tethering whenever onRoad",
+                                  "Enables/Disables tethering based on road",
+                                  "../assets/offroad/icon_network.png",
+                                  this));
+
+  addItem(new ParamControl("moneyPlane.settings.onRoadUploadEnabled",
+                                  "Enable uploading when onRoad",
+                                  "If Enabled allow uploads to be made by uploader while driving.",
+                                  "../assets/offroad/icon_road.png",
+                                  this));
+  addItem(new LabelControl("MQTT Settings",
+                                  "",
+                                  "Use these settings are used to configure mqtt to server.",
+                                  this,
+                                  "../assets/moneyplane/settings/mqtt.png",
+                                  &mqttConfigs));
+
+}
+
 JvePilotTogglesPanel::JvePilotTogglesPanel(QWidget *parent) : ListWidget(parent) {
   QList<AbstractControl*> toggles;
 
@@ -487,6 +555,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
     {"Device", device},
     {"Network", network_panel(this)},
     {"Toggles", new TogglesPanel(this)},
+    {"💵✈️", new MoneyPlaneTogglesPanel(this)},
     {"jvePilot", new JvePilotTogglesPanel(this)},
     {"Software", new SoftwarePanel(this)},
   };
