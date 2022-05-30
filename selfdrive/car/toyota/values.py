@@ -70,6 +70,88 @@ class CAR:
   LEXUS_RX_TSS2 = "LEXUS RX 2020"
   LEXUS_RXH_TSS2 = "LEXUS RX HYBRID 2020"
 
+class Footnote(Enum):
+  DSU = CarFootnote(
+    "When disconnecting the Driver Support Unit (DSU), openpilot Adaptive Cruise Control (ACC) will replace stock " +
+    "Adaptive Cruise Control (ACC). <b><i> NOTE: disconnecting the DSU disables Automatic Emergency Braking (AEB).</i></b>",
+    Column.LONGITUDINAL, star=Star.HALF)
+  CAMRY = CarFootnote(
+    "28mph for Camry 4CYL L, 4CYL LE and 4CYL SE which don't have Full-Speed Range Dynamic Radar Cruise Control.",
+    Column.FSR_LONGITUDINAL)
+  ANGLE_SENSOR = CarFootnote(
+    "An inaccurate steering wheel angle sensor makes precise control difficult.",
+    Column.STEERING_TORQUE, star=Star.HALF)
+
+
+@dataclass
+class ToyotaCarInfo(CarInfo):
+  package: str = "All"
+  good_torque: bool = True
+  harness: Enum = Harness.toyota
+
+
+CAR_INFO: Dict[str, Union[ToyotaCarInfo, List[ToyotaCarInfo]]] = {
+  # Toyota
+  CAR.ALPHARD_TSS2: ToyotaCarInfo("Toyota Alphard 2019-20"),
+  CAR.ALPHARDH_TSS2: ToyotaCarInfo("Toyota Alphard Hybrid 2021"),
+  CAR.AVALON: ToyotaCarInfo("Toyota Avalon 2016-18", "TSS-P", footnotes=[Footnote.DSU]),
+  CAR.AVALON_2019: ToyotaCarInfo("Toyota Avalon 2019-21", "TSS-P", footnotes=[Footnote.DSU]),
+  CAR.AVALONH_2019: ToyotaCarInfo("Toyota Avalon Hybrid 2019-21", "TSS-P", footnotes=[Footnote.DSU]),
+  CAR.AVALON_TSS2: ToyotaCarInfo("Toyota Avalon 2022"),
+  CAR.AVALONH_TSS2: ToyotaCarInfo("Toyota Avalon Hybrid 2022"),
+  CAR.CAMRY: ToyotaCarInfo("Toyota Camry 2018-20", video_link="https://www.youtube.com/watch?v=fkcjviZY9CM", footnotes=[Footnote.CAMRY]),
+  CAR.CAMRYH: ToyotaCarInfo("Toyota Camry Hybrid 2018-20", video_link="https://www.youtube.com/watch?v=Q2DYY0AWKgk", footnotes=[Footnote.CAMRY]),
+  CAR.CAMRY_TSS2: ToyotaCarInfo("Toyota Camry 2021-22", footnotes=[Footnote.CAMRY]),
+  CAR.CAMRYH_TSS2: ToyotaCarInfo("Toyota Camry Hybrid 2021-22"),
+  CAR.CHR: ToyotaCarInfo("Toyota C-HR 2017-21"),
+  CAR.CHRH: ToyotaCarInfo("Toyota C-HR Hybrid 2017-19"),
+  CAR.COROLLA: ToyotaCarInfo("Toyota Corolla 2017-19", footnotes=[Footnote.DSU]),
+  CAR.COROLLA_TSS2: [
+    ToyotaCarInfo("Toyota Corolla 2020-22", video_link="https://www.youtube.com/watch?v=_66pXk0CBYA"),
+    ToyotaCarInfo("Toyota Corolla Hatchback 2019-22", video_link="https://www.youtube.com/watch?v=_66pXk0CBYA"),
+  ],
+  CAR.COROLLAH_TSS2: [
+    ToyotaCarInfo("Toyota Corolla Hybrid 2020-22"),
+    ToyotaCarInfo("Lexus UX Hybrid 2019-21"),
+  ],
+  CAR.HIGHLANDER: ToyotaCarInfo("Toyota Highlander 2017-19", video_link="https://www.youtube.com/watch?v=0wS0wXSLzoo", footnotes=[Footnote.DSU]),
+  CAR.HIGHLANDER_TSS2: ToyotaCarInfo("Toyota Highlander 2020-22"),
+  CAR.HIGHLANDERH: ToyotaCarInfo("Toyota Highlander Hybrid 2017-19", footnotes=[Footnote.DSU]),
+  CAR.HIGHLANDERH_TSS2: ToyotaCarInfo("Toyota Highlander Hybrid 2020-22"),
+  CAR.PRIUS: [
+    ToyotaCarInfo("Toyota Prius 2016-20", "TSS-P", video_link="https://www.youtube.com/watch?v=8zopPJI8XQ0", footnotes=[Footnote.DSU, Footnote.ANGLE_SENSOR]),
+    ToyotaCarInfo("Toyota Prius Prime 2017-20", video_link="https://www.youtube.com/watch?v=8zopPJI8XQ0", footnotes=[Footnote.DSU, Footnote.ANGLE_SENSOR]),
+  ],
+  CAR.PRIUS_V: ToyotaCarInfo("Toyota Prius v 2017", "TSS-P", min_enable_speed=MIN_ACC_SPEED, footnotes=[Footnote.DSU, Footnote.ANGLE_SENSOR]),
+  CAR.PRIUS_TSS2: [
+    ToyotaCarInfo("Toyota Prius 2021-22", video_link="https://www.youtube.com/watch?v=J58TvCpUd4U"),
+    ToyotaCarInfo("Toyota Prius Prime 2021-22", video_link="https://www.youtube.com/watch?v=J58TvCpUd4U"),
+  ],
+  CAR.RAV4: ToyotaCarInfo("Toyota RAV4 2016-18", "TSS-P", footnotes=[Footnote.DSU]),
+  CAR.RAV4H: ToyotaCarInfo("Toyota RAV4 Hybrid 2016-18", "TSS-P", footnotes=[Footnote.DSU]),
+  CAR.RAV4_TSS2: ToyotaCarInfo("Toyota RAV4 2019-21", video_link="https://www.youtube.com/watch?v=wJxjDd42gGA"),
+  CAR.RAV4_TSS2_2022: ToyotaCarInfo("Toyota RAV4 2022"),
+  CAR.RAV4H_TSS2: ToyotaCarInfo("Toyota RAV4 Hybrid 2019-21"),
+  CAR.RAV4H_TSS2_2022: ToyotaCarInfo("Toyota RAV4 Hybrid 2022", video_link="https://youtu.be/U0nH9cnrFB0"),
+  CAR.MIRAI: ToyotaCarInfo("Toyota Mirai 2021"),
+  CAR.SIENNA: ToyotaCarInfo("Toyota Sienna 2018-20", video_link="https://www.youtube.com/watch?v=q1UPOo4Sh68", footnotes=[Footnote.DSU]),
+
+  # Lexus
+  CAR.LEXUS_CTH: ToyotaCarInfo("Lexus CT Hybrid 2017-18", "LSS", footnotes=[Footnote.DSU]),
+  CAR.LEXUS_ESH: ToyotaCarInfo("Lexus ES Hybrid 2017-18", "LSS", footnotes=[Footnote.DSU]),
+  CAR.LEXUS_ES_TSS2: ToyotaCarInfo("Lexus ES 2019-21"),
+  CAR.LEXUS_ESH_TSS2: ToyotaCarInfo("Lexus ES Hybrid 2019-22"),
+  CAR.LEXUS_IS: ToyotaCarInfo("Lexus IS 2017-19"),
+  CAR.LEXUS_NX: ToyotaCarInfo("Lexus NX 2018-19", footnotes=[Footnote.DSU]),
+  CAR.LEXUS_NXH: ToyotaCarInfo("Lexus NX Hybrid 2018-19", footnotes=[Footnote.DSU]),
+  CAR.LEXUS_NX_TSS2: ToyotaCarInfo("Lexus NX 2020"),
+  CAR.LEXUS_RC: ToyotaCarInfo("Lexus RC 2020"),
+  CAR.LEXUS_RX: ToyotaCarInfo("Lexus RX 2016-18", footnotes=[Footnote.DSU]),
+  CAR.LEXUS_RXH: ToyotaCarInfo("Lexus RX Hybrid 2016-19", footnotes=[Footnote.DSU]),
+  CAR.LEXUS_RX_TSS2: ToyotaCarInfo("Lexus RX 2020-22"),
+  CAR.LEXUS_RXH_TSS2: ToyotaCarInfo("Lexus RX Hybrid 2020-21"),
+}
+
 # (addr, cars, bus, 1/freq*100, vl)
 STATIC_DSU_MSGS = [
   (0x128, (CAR.PRIUS, CAR.RAV4H, CAR.LEXUS_RXH, CAR.LEXUS_NXH, CAR.LEXUS_NX, CAR.RAV4, CAR.COROLLA, CAR.AVALON), 1,   3, b'\xf4\x01\x90\x83\x00\x37'),
@@ -840,10 +922,12 @@ FW_VERSIONS = {
     (Ecu.fwdRadar, 0x750, 0xf): [
       b'\x018821F3301400\x00\x00\x00\x00',
       b'\x018821F6201200\x00\x00\x00\x00',
+      b'\x018821F6201300\x00\x00\x00\x00',
     ],
     (Ecu.fwdCamera, 0x750, 0x6d): [
       b'\x028646F0E02100\x00\x00\x00\x008646G2601200\x00\x00\x00\x00',
       b'\x028646F4803000\x00\x00\x00\x008646G5301200\x00\x00\x00\x00',
+      b'\x028646F4803000\x00\x00\x00\x008646G3304000\x00\x00\x00\x00',
     ],
   },
   CAR.LEXUS_IS: {
@@ -1211,6 +1295,32 @@ FW_VERSIONS = {
       b'\x028646F4203500\x00\x00\x00\x008646G2601200\x00\x00\x00\x00',
       b'\x028646F4203700\x00\x00\x00\x008646G2601400\x00\x00\x00\x00',
       b'\x028646F4203800\x00\x00\x00\x008646G2601500\x00\x00\x00\x00',
+    ],
+  },
+  CAR.RAV4H_TSS2_2022: {
+    (Ecu.esp, 0x7b0, None): [
+      b'\x01F15264283100\x00\x00\x00\x00',
+      b'\x01F15264286200\x00\x00\x00\x00',
+      b'\x01F15264286100\x00\x00\x00\x00',
+      b'\x01F15264283200\x00\x00\x00\x00',
+    ],
+    (Ecu.eps, 0x7a1, None): [
+      b'\x028965B0R01500\x00\x00\x00\x008965B0R02500\x00\x00\x00\x00',
+      b'8965B42182\x00\x00\x00\x00\x00\x00',
+      b'8965B42172\x00\x00\x00\x00\x00\x00',
+    ],
+    (Ecu.engine, 0x700, None): [
+      b'\x01896634A62000\x00\x00\x00\x00',
+      b'\x01896634A08000\x00\x00\x00\x00',
+      b'\x01896634A61000\x00\x00\x00\x00',
+      b'\x01896634A02001\x00\x00\x00\x00',
+      b'\x01896634A03000\x00\x00\x00\x00',
+    ],
+    (Ecu.fwdRadar, 0x750, 0xf): [
+      b'\x018821F0R01100\x00\x00\x00\x00',
+    ],
+    (Ecu.fwdCamera, 0x750, 0x6d): [
+      b'\x028646F0R02100\x00\x00\x00\x008646G0R01100\x00\x00\x00\x00',
     ],
   },
   CAR.SIENNA: {
@@ -1589,11 +1699,13 @@ FW_VERSIONS = {
   CAR.LEXUS_RXH_TSS2: {
     (Ecu.engine, 0x7e0, None): [
       b'\x02348X8000\x00\x00\x00\x00\x00\x00\x00\x00A4802000\x00\x00\x00\x00\x00\x00\x00\x00',
+      b'\x02348Y3000\x00\x00\x00\x00\x00\x00\x00\x00A4802000\x00\x00\x00\x00\x00\x00\x00\x00',
       b'\x0234D14000\x00\x00\x00\x00\x00\x00\x00\x00A4802000\x00\x00\x00\x00\x00\x00\x00\x00',
       b'\x0234D16000\x00\x00\x00\x00\x00\x00\x00\x00A4802000\x00\x00\x00\x00\x00\x00\x00\x00',
     ],
     (Ecu.esp, 0x7b0, None): [
       b'F152648831\x00\x00\x00\x00\x00\x00',
+      b'F152648891\x00\x00\x00\x00\x00\x00',
       b'F152648D00\x00\x00\x00\x00\x00\x00',
       b'F152648D60\x00\x00\x00\x00\x00\x00',
     ],
