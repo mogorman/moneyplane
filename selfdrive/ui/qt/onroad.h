@@ -24,6 +24,8 @@ class OnroadHud : public QWidget {
   Q_PROPERTY(bool hideDM MEMBER hideDM NOTIFY valueChanged);
   Q_PROPERTY(int status MEMBER status NOTIFY valueChanged);
 
+  Q_PROPERTY(bool showSpeedLimit MEMBER showSpeedLimit NOTIFY valueChanged);
+  Q_PROPERTY(QString speedLimit MEMBER speedLimit NOTIFY valueChanged);
 public:
   explicit OnroadHud(QWidget *parent);
   void updateState(const UIState &s);
@@ -33,7 +35,8 @@ private:
   void drawText(QPainter &p, int x, int y, const QString &text, QColor color);
   void drawText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
   void paintEvent(QPaintEvent *event) override;
-
+  void drawCircle(QPainter &p, int x, int y, int r, QBrush bg);
+  void drawSpeedSign(QPainter &p, QRect rc, const QString &speed);
   QPixmap eco_imgs[3];
   QPixmap auto_follow_imgs[2];
   int pedalPressedAmount;
