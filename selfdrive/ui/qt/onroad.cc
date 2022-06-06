@@ -161,11 +161,6 @@ void OnroadAlerts::paintEvent(QPaintEvent *event) {
   p.fillRect(r, g);
   p.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-  // Speed Limit Sign
-  if (showSpeedLimit) {
-    drawSpeedSign(p, speed_sgn_rc, speedLimit);
-  }
-
   // text
   const QPoint c = r.center();
   p.setPen(QColor(0xff, 0xff, 0xff));
@@ -205,7 +200,7 @@ void OnroadHud::updateState(const UIState &s) {
   const SubMaster &sm = *(s.sm);
   const auto cs = sm["controlsState"].getControlsState();
   const auto live_map_data = sm["liveMapData"].getLiveMapData();
-  int speed_limit = std::nearbyint(live_map_data.getSpeedLimit() * 3.6);
+  int speed_limit =  0;
 
   float maxspeed = cs.getVCruise();
   bool cruise_set = maxspeed > 0 && (int)maxspeed != SET_SPEED_NA;
@@ -226,13 +221,14 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("hideDM", cs.getAlertSize() != cereal::ControlsState::AlertSize::NONE);
   setProperty("status", s.status);
 
-  setProperty("showSpeedLimit", speed_limit > 0);
-  setProperty("speedLimit", QString::number(speed_limit));
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
     setProperty("engageable", cs.getEngageable() || cs.getEnabled());
     setProperty("dmActive", sm["driverMonitoringState"].getDriverMonitoringState().getIsActiveMode());
+    speed_limit = std::nearbyint(live_map_data.getSpeedLimit() * 3.6);
+    setProperty("showSpeedLimit", speed_limit > 0);
+    setProperty("speedLimit", QString::number(speed_limit));
   }
 }
 
@@ -278,6 +274,10 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if (engageable) {
     drawIcon(p, rect().right() - radius / 2 - bdr_s * 2, radius / 2 + int(bdr_s * 1.5),
              engage_img, bg_colors[status], 1.0);
+  }
+  // Speed Limit Sign
+  if (showSpeedLimit) {
+    drawSpeedSign(p, speed_sgn_rc, speedLimit);
   }
 
   // dm icon

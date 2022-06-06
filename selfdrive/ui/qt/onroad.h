@@ -26,6 +26,7 @@ class OnroadHud : public QWidget {
 
   Q_PROPERTY(bool showSpeedLimit MEMBER showSpeedLimit NOTIFY valueChanged);
   Q_PROPERTY(QString speedLimit MEMBER speedLimit NOTIFY valueChanged);
+
 public:
   explicit OnroadHud(QWidget *parent);
   void updateState(const UIState &s);
@@ -50,6 +51,7 @@ private:
   const int img_size = (radius / 2) * 1.5;
   QString speed;
   QString speedUnit;
+
   bool showSpeedLimit = false;
   QString speedLimit;
 
