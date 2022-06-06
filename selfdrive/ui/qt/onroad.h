@@ -111,6 +111,9 @@ private:
   QWidget *map = nullptr;
   QHBoxLayout* split;
 
+  bool showSpeedLimit = false;
+  QString speedLimit;
+
 private slots:
   void notify_state();
   void offroadTransition(bool offroad);
