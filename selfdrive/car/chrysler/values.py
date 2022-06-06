@@ -6,7 +6,7 @@ class CarControllerParams:
   STEER_MAX = 261         # 262 faults
   STEER_DELTA_UP = 4      # 3 is stock. 100 is fine. 200 is too much it seems
   STEER_DELTA_DOWN = 4    # no faults on the way down it seems
-  STEER_ERROR_MAX = 160
+  STEER_ERROR_MAX = 80
 
 
 class CAR:
