@@ -49,6 +49,9 @@ private:
   const int img_size = (radius / 2) * 1.5;
   QString speed;
   QString speedUnit;
+  bool showSpeedLimit = false;
+  QString speedLimit;
+
   QString maxSpeed;
   bool is_cruise_set = false;
   bool engageable = false;
@@ -110,9 +113,6 @@ private:
   QColor bg = bg_colors[STATUS_DISENGAGED];
   QWidget *map = nullptr;
   QHBoxLayout* split;
-
-  bool showSpeedLimit = false;
-  QString speedLimit;
 
 private slots:
   void notify_state();
