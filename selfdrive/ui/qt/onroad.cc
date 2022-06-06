@@ -305,6 +305,16 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   }
 }
 
+void OnroadHud::drawCenteredText(QPainter &p, int x, int y, const QString &text, QColor color) {
+  QFontMetrics fm(p.font());
+  QRect init_rect = fm.boundingRect(text);
+  QRect real_rect = fm.boundingRect(init_rect, 0, text);
+  real_rect.moveCenter({x, y});
+
+  p.setPen(color);
+  p.drawText(real_rect, Qt::AlignCenter, text);
+}
+
 void OnroadHud::drawCircle(QPainter &p, int x, int y, int r, QBrush bg) {
   p.setPen(Qt::NoPen);
   p.setBrush(bg);

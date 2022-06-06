@@ -35,6 +35,7 @@ private:
   void drawText(QPainter &p, int x, int y, const QString &text, QColor color);
   void drawText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
   void paintEvent(QPaintEvent *event) override;
+  void drawCenteredText(QPainter &p, int x, int y, const QString &text, QColor color);
   void drawCircle(QPainter &p, int x, int y, int r, QBrush bg);
   void drawSpeedSign(QPainter &p, QRect rc, const QString &speed);
   QPixmap eco_imgs[3];
