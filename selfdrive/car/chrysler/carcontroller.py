@@ -45,7 +45,7 @@ class CarController():
     self.moving_fast = False
     self.min_steer_check = self.opParams.get("steer.checkMinimum")
 
-  def update(self, enabled, CS, actuators, pcm_cancel_cmd, hud_alert, gas_resume_speed, c):
+  def update(self, enabled, CC, CS, actuators, pcm_cancel_cmd, hud_alert, gas_resume_speed, c):
     if CS.button_pressed(ButtonType.lkasToggle, False):
       c.jvePilotState.carControl.useLaneLines = not c.jvePilotState.carControl.useLaneLines
       self.params.put("EndToEndToggle", "0" if c.jvePilotState.carControl.useLaneLines else "1")
@@ -55,6 +55,11 @@ class CarController():
     can_sends = []
     actuators = self.lkas_control(CS, actuators, can_sends, enabled, hud_alert, c.jvePilotState)
     self.wheel_button_control(CS, can_sends, enabled, gas_resume_speed, c.jvePilotState, pcm_cancel_cmd)
+
+    if self.prev_lkas_frame == CS.lkas_counter:
+      new_actuators = CC.actuators.copy()
+      new_actuators.steer = self.apply_steer_last / CarControllerParams.STEER_MAX
+      return new_actuators, can_sends
 
     return actuators, can_sends
 
@@ -87,6 +92,7 @@ class CarController():
         self.torq_enabled = False  # < 14.5m/s stock turns off this bit, but fine down to 13.5
 
     lkas_active = self.moving_fast and enabled
+
     if not lkas_active:
       apply_steer = 0
 
