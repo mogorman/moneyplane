@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
 
   QTimer timer;
   QObject::connect(&timer, &QTimer::timeout, [=]() {
-    static SubMaster sm({"deviceState", "controlsState", "lateralPlan"});
+    static SubMaster sm({"deviceState", "controlsState", "lateralPlan", "liveMapData"});
 
     bool onroad_prev = sm.allAliveAndValid({"deviceState"}) &&
                        sm["deviceState"].getDeviceState().getStarted();

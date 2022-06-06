@@ -31,6 +31,8 @@ typedef cereal::CarControl::HUDControl::AudibleAlert AudibleAlert;
 const float y_offset = Hardware::EON() ? 0.0 : 150.0;
 const float ZOOM = Hardware::EON() ? 2138.5 : 2912.8;
 
+const QRect speed_sgn_rc(bdr_s * 2, bdr_s * 2.5 + 202, 184, 184);
+
 struct Alert {
   QString text1;
   QString text2;

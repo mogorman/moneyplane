@@ -161,6 +161,11 @@ void OnroadAlerts::paintEvent(QPaintEvent *event) {
   p.fillRect(r, g);
   p.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
+  // Speed Limit Sign
+  if (showSpeedLimit) {
+    drawSpeedSign(p, speed_sgn_rc, speedLimit);
+  }
+
   // text
   const QPoint c = r.center();
   p.setPen(QColor(0xff, 0xff, 0xff));
@@ -199,6 +204,8 @@ void OnroadHud::updateState(const UIState &s) {
   const int SET_SPEED_NA = 255;
   const SubMaster &sm = *(s.sm);
   const auto cs = sm["controlsState"].getControlsState();
+  const auto live_map_data = sm["liveMapData"].getLiveMapData();
+  int speed_limit = std::nearbyint(live_map_data.getSpeedLimit() * 3.6);
 
   float maxspeed = cs.getVCruise();
   bool cruise_set = maxspeed > 0 && (int)maxspeed != SET_SPEED_NA;
@@ -218,6 +225,9 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("speedUnit", s.scene.is_metric ? "km/h" : "mph");
   setProperty("hideDM", cs.getAlertSize() != cereal::ControlsState::AlertSize::NONE);
   setProperty("status", s.status);
+
+  setProperty("showSpeedLimit", speed_limit > 0);
+  setProperty("speedLimit", QString::number(speed_limit));
 
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
@@ -293,6 +303,29 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
       img_size + button_bigger,
       img_size + button_bigger);
   }
+}
+
+void OnroadHud::drawCircle(QPainter &p, int x, int y, int r, QBrush bg) {
+  p.setPen(Qt::NoPen);
+  p.setBrush(bg);
+  p.drawEllipse(x - r, y - r, 2 * r, 2 * r);
+}
+
+
+void OnroadHud::drawSpeedSign(QPainter &p, QRect rc, const QString &speed_limit) {
+  const QColor ring_color = QColor(255, 0, 0, 255);
+  const QColor inner_color = QColor(255, 255, 255, 255);
+  const QColor text_color = QColor(0, 0, 0, 255);
+
+  const int x = rc.center().x();
+  const int y = rc.center().y();
+  const int r = rc.width() / 2.0f;
+
+  drawCircle(p, x, y, r, ring_color);
+  drawCircle(p, x, y, int(r * 0.8f), inner_color);
+
+  configFont(p, "Open Sans", 89, "Bold");
+  drawCenteredText(p, x, y, speed_limit, text_color);
 }
 
 void OnroadHud::drawText(QPainter &p, int x, int y, const QString &text, QColor color) {
