@@ -51,6 +51,12 @@ class CarController():
       self.params.put("EndToEndToggle", "0" if c.jvePilotState.carControl.useLaneLines else "1")
       c.jvePilotState.notifyUi = True
 
+    frame = CS.lkas_counter
+    if self.prev_frame == frame:
+      new_actuators = actuators.copy()
+      new_actuators.steer = self.apply_steer_last / CarControllerParams.STEER_MAX
+      return new_actuators, []
+
     #*** control msgs ***
     can_sends = []
     actuators = self.lkas_control(CS, actuators, can_sends, enabled, hud_alert, c.jvePilotState)
