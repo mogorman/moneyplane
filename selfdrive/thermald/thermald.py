@@ -141,7 +141,6 @@ def handle_fan_tici(controller, max_cpu_temp, fan_speed, ignition):
     controller.reset()
 
   fan_pwr_out = -int(controller.update(
-                     setpoint=75,
                      measurement=max_cpu_temp,
                      feedforward=interp(max_cpu_temp, [60.0, 100.0], [0, -80])
                   ))
