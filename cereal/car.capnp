@@ -449,6 +449,7 @@ struct CarParams {
     pid @26 :LateralPIDTuning;
     indi @27 :LateralINDITuning;
     lqr @40 :LateralLQRTuning;
+    torque @67 :LateralTorqueTuning;
   }
 
   steerLimitAlert @28 :Bool;
@@ -497,11 +498,20 @@ struct CarParams {
     kf @4 :Float32;
   }
 
+  struct LateralTorqueTuning {
+    useSteeringAngle @0 :Bool;
+    kp @1 :Float32;
+    ki @2 :Float32;
+    friction @3 :Float32;
+    kf @4 :Float32;
+  }
+
   struct LongitudinalPIDTuning {
     kpBP @0 :List(Float32);
     kpV @1 :List(Float32);
     kiBP @2 :List(Float32);
     kiV @3 :List(Float32);
+    kf  @6 :Float32;
     deadzoneBP @4 :List(Float32);
     deadzoneV @5 :List(Float32);
   }

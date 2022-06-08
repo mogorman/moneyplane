@@ -60,7 +60,9 @@ class CarController():
 
   def lkas_control(self, CS, actuators, can_sends, enabled, hud_alert, jvepilot_state):
     if self.prev_frame == CS.frame:
-      return car.CarControl.Actuators.new_message()
+      new_actuators = actuators.copy()
+      new_actuators.steer = self.apply_steer_last / CarControllerParams.STEER_MAX
+      return new_actuators, []
     self.prev_frame = CS.frame
 
     self.lkas_frame += 1
