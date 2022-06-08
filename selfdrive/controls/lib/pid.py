@@ -47,8 +47,6 @@ class PIDController():
     self.speed = speed
     self.p = float(error) * self.k_p
 
-    error = float(apply_deadzone(setpoint - measurement, deadzone))
-    self.p = error * self.k_p
     self.f = feedforward * self.k_f
     self.d = error_rate * self.k_d
 
