@@ -140,10 +140,8 @@ def handle_fan_tici(controller, max_cpu_temp, fan_speed, ignition):
   if ignition != last_ignition:
     controller.reset()
 
-  fan_pwr_out = -int(controller.update(
-                     measurement=max_cpu_temp,
-                     feedforward=interp(max_cpu_temp, [60.0, 100.0], [0, -80])
-                  ))
+  error = 70 - max_cpu_temp
+  fan_pwr_out = -int(controller.update(error=error, feedforward=interp(max_cpu_temp, [60.0, 100.0], [0, -80])))
 
   last_ignition = ignition
   return fan_pwr_out
