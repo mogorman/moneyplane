@@ -5,6 +5,7 @@ from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness,
 from selfdrive.car.interfaces import CarInterfaceBase
 from common.cached_params import CachedParams
 from common.op_params import opParams
+from selfdrive.controls.lib.latcontrol_torque import set_torque_tune
 
 ButtonType = car.CarState.ButtonEvent.Type
 
@@ -29,12 +30,12 @@ class CarInterface(CarInterfaceBase):
     ret.wheelbase = 3.089  # in meters for Pacifica Hybrid 2017
     ret.steerRatio = 16.2  # Pacifica Hybrid 2017
     ret.mass = 2242. + STD_CARGO_KG  # kg curb weight Pacifica Hybrid 2017
-    ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[9., 20.], [9., 20.]]
-    ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15, 0.30], [0.03, 0.05]]
-    ret.lateralTuning.pid.kf = 0.00006   # full torque for 10 deg at 80mph means 0.00007818594
-    ret.steerActuatorDelay = 0.1
+    ret.steerActuatorDelay = 0.075
     ret.steerRateCost = 0.7
     ret.steerLimitTimer = 0.4
+    MAX_LAT_ACCEL = 1.7
+    FRICTION = .05
+    set_torque_tune(ret.lateralTuning, MAX_LAT_ACCEL, FRICTION)
 
     if candidate in (CAR.JEEP_CHEROKEE, CAR.JEEP_CHEROKEE_2019):
       ret.wheelbase = 2.91  # in meters
