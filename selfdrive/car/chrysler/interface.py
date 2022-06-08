@@ -5,6 +5,7 @@ from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness,
 from selfdrive.car.interfaces import CarInterfaceBase
 from common.cached_params import CachedParams
 from common.op_params import opParams
+from selfdrive.controls.lib.latcontrol_torque import set_torque_tune
 
 ButtonType = car.CarState.ButtonEvent.Type
 
@@ -18,7 +19,7 @@ class CarInterface(CarInterfaceBase):
     return -10., 10.  # high limits
 
   @staticmethod
-  def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=None):
+  def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=None, disable_radar=False):
     min_steer_check = opParams.get('steer.checkMinimum')
 
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
@@ -29,19 +30,12 @@ class CarInterface(CarInterfaceBase):
     ret.wheelbase = 3.089  # in meters for Pacifica Hybrid 2017
     ret.steerRatio = 16.2  # Pacifica Hybrid 2017
     ret.mass = 2242. + STD_CARGO_KG  # kg curb weight Pacifica Hybrid 2017
-
-    MAX_LAT_ACCEL = 2.6
-    ret.lateralTuning.init('torque')
-    ret.lateralTuning.torque.useSteeringAngle = True
-    ret.lateralTuning.torque.kp = 1.0 / MAX_LAT_ACCEL
-    ret.lateralTuning.torque.kf = 1.0 / MAX_LAT_ACCEL
-    ret.lateralTuning.torque.ki = 0.1 / MAX_LAT_ACCEL
-    ret.lateralTuning.torque.friction = 0.05
-
-    ret.lateralTuning.pid.kf = 0.00006   # full torque for 10 deg at 80mph means 0.00007818594
-    ret.steerActuatorDelay = 0.1
-    ret.steerRateCost = 1.0
+    ret.steerActuatorDelay = 0.075
+    ret.steerRateCost = 0.7
     ret.steerLimitTimer = 0.4
+    MAX_LAT_ACCEL = 1.7
+    FRICTION = .05
+    set_torque_tune(ret.lateralTuning, MAX_LAT_ACCEL, FRICTION)
 
     if candidate in (CAR.JEEP_CHEROKEE, CAR.JEEP_CHEROKEE_2019):
       ret.wheelbase = 2.91  # in meters
