@@ -252,6 +252,7 @@ class CarState(CarStateBase):
       # sig_name, sig_address
       ("COUNTER", "LKAS_COMMAND"),
       ("CAR_MODEL", "LKAS_HUD"),
+      ("LKAS_STATUS_OK", "LKAS_HEARTBIT"),
       ("LKAS_LANE_LINES", "LKAS_HUD"),
     ] + forward_lkas_heartbit_signals
     checks = [
