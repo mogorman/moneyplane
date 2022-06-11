@@ -81,7 +81,7 @@ class CarState(CarStateBase):
     ret.accFaulted = cp.vl["ACC_2"]["ACC_FAULTED"] != 0
     self.dashboard = cp.vl["DASHBOARD"]
     #Gear
-    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(cp.vl["TRANSMISSION_STATUS"]["GEAR_STATE"], None))
+    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(cp.vl["GEAR"]["PRNDL"], None))
 
     #Steering Info
     ret.steeringAngleDeg = cp.vl["STEERING"]["STEER_ANGLE"]
