@@ -58,6 +58,12 @@ class CarController:
     actuators = self.lkas_control(CC, CS, can_sends)
     self.wheel_button_control(CS, can_sends, CC.enabled, gas_resume_speed, CC.jvePilotState, CC.cruiseControl.cancel)
 
+    # this seems needed to avoid steering faults and to force the sync with the EPS counter
+    if self.prev_lkas_frame == CS.lkas_counter:
+      new_actuators = CC.actuators.copy()
+      new_actuators.steer = self.apply_steer_last / CarControllerParams.STEER_MAX
+      return new_actuators, []
+
     return actuators, can_sends
 
   def lkas_control(self, CC, CS, can_sends):
@@ -91,6 +97,7 @@ class CarController:
         self.torq_enabled = False  # < 14.5m/s stock turns off this bit, but fine down to 13.5
 
     lkas_active = self.moving_fast and CC.enabled
+
     if not lkas_active:
       apply_steer = 0
 
