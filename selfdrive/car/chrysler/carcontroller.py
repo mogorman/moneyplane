@@ -33,6 +33,7 @@ class CarController:
     self.steer_rate_limited = False
     self.last_button_counter = -1
     self.button_frame = -1
+    self.prev_lkas_frame = -1
 
     self.packer = CANPacker(dbc_name)
 
@@ -74,6 +75,7 @@ class CarController:
     actuators = CC.actuators
 
     self.lkas_frame += 1
+    self.prev_lkas_frame = CS.lkas_counter
     lkas_counter = CS.lkas_counter
     if self.prev_lkas_counter == lkas_counter:
       lkas_counter = (self.prev_lkas_counter + 1) % 16  # Predict the next frame
